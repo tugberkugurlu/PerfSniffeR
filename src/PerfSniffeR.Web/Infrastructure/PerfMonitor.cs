@@ -12,24 +12,23 @@ namespace PerfSniffeR.Web.Infrastructure
     public sealed class PerfMonitor
     {
         private readonly int _sleepIntervalInMilliSecs;
-        private readonly IEnumerable<PerformanceCounter> serviceCounters;
+        public static readonly IEnumerable<PerformanceCounter> ServiceCounters = new[]
+        {
+            new PerformanceCounter("Processor Information", "% Processor Time", "_Total"),
+            new PerformanceCounter("MSSQL$SQLEXPRESS:Access Methods", "Page Splits/sec"),
+            new PerformanceCounter("MSSQL$SQLEXPRESS:Buffer Manager", "Buffer cache hit ratio"),
+            new PerformanceCounter("MSSQL$SQLEXPRESS:Buffer Manager", "Checkpoint pages/sec"),
+            new PerformanceCounter("MSSQL$SQLEXPRESS:Buffer Manager", "Page life expectancy"),
+            new PerformanceCounter("MSSQL$SQLEXPRESS:General Statistics", "Processes blocked"),
+            new PerformanceCounter("MSSQL$SQLEXPRESS:General Statistics", "User Connections"),
+            new PerformanceCounter("MSSQL$SQLEXPRESS:Locks", "Lock Waits/sec", "_Total"),
+            new PerformanceCounter("MSSQL$SQLEXPRESS:SQL Statistics", "Batch Requests/sec"),
+            new PerformanceCounter("MSSQL$SQLEXPRESS:SQL Statistics", "SQL Compilations/sec")                                                      
+        };
 
         public PerfMonitor(int sleepIntervalInMilliSecs)
         {
             _sleepIntervalInMilliSecs = sleepIntervalInMilliSecs;
-            serviceCounters = new[]
-            {
-                new PerformanceCounter("Processor Information", "% Processor Time", "_Total"),
-                new PerformanceCounter("MSSQL$SQLEXPRESS:Access Methods", "Page Splits/sec"),
-                new PerformanceCounter("MSSQL$SQLEXPRESS:Buffer Manager", "Buffer cache hit ratio"),
-                new PerformanceCounter("MSSQL$SQLEXPRESS:Buffer Manager", "Checkpoint pages/sec"),
-                new PerformanceCounter("MSSQL$SQLEXPRESS:Buffer Manager", "Page life expectancy"),
-                new PerformanceCounter("MSSQL$SQLEXPRESS:General Statistics", "Processes blocked"),
-                new PerformanceCounter("MSSQL$SQLEXPRESS:General Statistics", "User Connections"),
-                new PerformanceCounter("MSSQL$SQLEXPRESS:Locks", "Lock Waits/sec", "_Total"),
-                new PerformanceCounter("MSSQL$SQLEXPRESS:SQL Statistics", "Batch Requests/sec"),
-                new PerformanceCounter("MSSQL$SQLEXPRESS:SQL Statistics", "SQL Compilations/sec")
-            };
         }
 
         public async Task MonitorAsync()
@@ -42,7 +41,7 @@ namespace PerfSniffeR.Web.Infrastructure
                 {
                     await Task.Delay(_sleepIntervalInMilliSecs);
                     List<PerfCounterSampleCarrier> counterSamples = new List<PerfCounterSampleCarrier>();
-                    foreach (PerformanceCounter performanceCounter in serviceCounters)
+                    foreach (PerformanceCounter performanceCounter in ServiceCounters)
                     {
                         try
                         {

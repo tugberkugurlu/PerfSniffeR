@@ -97,6 +97,7 @@
     </Compile>
     <Compile Include="Hubs\PerfCountersHub.cs" />
     <Compile Include="Infrastructure\PerfMonitor.cs" />
+    <Compile Include="Models\PerfCounterSampleCarrier.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
